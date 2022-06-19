@@ -68,8 +68,12 @@ public abstract class LoadBalancer {
 
 	public abstract String get(ClientRequest request);
 
-	// scheduler calls this method to check if every provider is alive
-	public void check() {
+	/**
+	 * All the providers will be checked.
+	 * If any active provider does not respond or respond 'full', then it will be set to inactive.
+	 * If any inactive provider responds for 2 times in a row, then it will be set to active.
+	 */
+	public void heartBeatCheck() {
 		for (Provider p : this.registerdProviders) {
 			// check all active providers
 			if (this.activeProviders.contains(p)) {
@@ -95,6 +99,7 @@ public abstract class LoadBalancer {
 					if (p.getHealth() == 0){
 						p.setHealth(1);
 						System.out.println("received response from inactive provider "+p.getUuid());
+						break;
 					}
 
 					if (p.getHealth() == 1) {

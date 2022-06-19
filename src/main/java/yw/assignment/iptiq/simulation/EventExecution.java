@@ -73,7 +73,7 @@ public class EventExecution {
 				break;
 			}
 			case 4: {
-				loadBalancer.check();
+				loadBalancer.heartBeatCheck();
 				break;
 			}
 			}
